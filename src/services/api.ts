@@ -1,4 +1,5 @@
 import { API_URL } from "@/lib/constants";
+import { CommunityMemberResponse, CommunityResponse } from "@/types/community";
 import { RideResponse, ParticipantResponse } from "@/types/ride";
 
 class ApiError extends Error {
@@ -53,5 +54,23 @@ export const rideApi = {
 
     const query = searchParams.toString();
     return fetchApi<RideResponse[]>(`/api/rides/upcoming${query ? `?${query}` : ""}`);
+  },
+};
+
+export const communityApi = {
+  getById: (id: string): Promise<CommunityResponse> => {
+    return fetchApi<CommunityResponse>(`/api/communities/${id}`);
+  },
+
+  getMembers: (id: string): Promise<CommunityMemberResponse[]> => {
+    return fetchApi<CommunityMemberResponse[]>(`/api/communities/${id}/members`);
+  },
+
+  getAll: (): Promise<CommunityResponse[]> => {
+    return fetchApi<CommunityResponse[]>(`/api/communities`);
+  },
+
+  getFeatured: (): Promise<CommunityResponse[]> => {
+    return fetchApi<CommunityResponse[]>(`/api/communities/featured`);
   },
 };
