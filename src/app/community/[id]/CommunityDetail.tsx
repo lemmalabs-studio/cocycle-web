@@ -519,15 +519,15 @@ const filteredRides = community?.rides?.filter((ride) =>
                 </h3>
                 <div className="flex flex-wrap gap-2">
                   {members.slice(0, 8).map((member) => (
-                    <div key={member.userId} className="relative" title={member.name || "Member"}>
+                    <Link key={member.userId} href={`/user/${member.userId}`} className="relative" title={member.name || "Member"}>
                       {member.avatar ? (
                         <img
                           src={member.avatar}
                           alt={member.name || "Member"}
-                          className="w-10 h-10 rounded-full object-cover"
+                          className="w-10 h-10 rounded-full object-cover hover:opacity-80 transition-opacity"
                         />
                       ) : (
-                        <div className="w-10 h-10 rounded-full bg-[#5B7FFF]/20 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-full bg-[#5B7FFF]/20 flex items-center justify-center hover:opacity-80 transition-opacity">
                           <svg className="w-5 h-5 text-[#5B7FFF]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                           </svg>
@@ -540,7 +540,7 @@ const filteredRides = community?.rides?.filter((ride) =>
                           </svg>
                         </div>
                       )}
-                    </div>
+                    </Link>
                   ))}
                   {members.length > 8 && (
                     <div className="w-10 h-10 rounded-full bg-[#F5F7FA] flex items-center justify-center text-[#6B7A90] text-xs font-medium">
