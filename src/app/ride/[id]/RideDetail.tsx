@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRide, useRideParticipants } from "@/hooks/useRideQueries";
 import RideMap from "./RideMap";
 
@@ -320,7 +321,10 @@ export default function RideDetail({ rideId }: RideDetailProps) {
       {/* Host section */}
       <div className="mb-6">
         <p className="text-[#1A2B4A] font-bold text-xl mb-3">Host</p>
-        <div className="flex items-center">
+        <Link
+          href={`/user/${ride.creatorId}`}
+          className="flex items-center hover:opacity-80 transition-opacity"
+        >
           {hostParticipant?.avatar || ride.creatorAvatar ? (
             <img
               src={hostParticipant?.avatar || ride.creatorAvatar}
@@ -342,7 +346,10 @@ export default function RideDetail({ rideId }: RideDetailProps) {
               {hostParticipant?.level || "Cyclist"}
             </p>
           </div>
-        </div>
+          <svg className="w-5 h-5 text-[#9BA8B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </Link>
       </div>
 
       {/* Participants section */}
@@ -355,7 +362,11 @@ export default function RideDetail({ rideId }: RideDetailProps) {
         {otherParticipants.length > 0 ? (
           <div className="space-y-4">
             {otherParticipants.map((participant) => (
-              <div key={participant.userId} className="flex items-center">
+              <Link
+                key={participant.userId}
+                href={`/user/${participant.userId}`}
+                className="flex items-center hover:opacity-80 transition-opacity"
+              >
                 {participant.avatar ? (
                   <img
                     src={participant.avatar}
@@ -377,7 +388,10 @@ export default function RideDetail({ rideId }: RideDetailProps) {
                     {participant.level || "Cyclist"}
                   </p>
                 </div>
-              </div>
+                <svg className="w-5 h-5 text-[#9BA8B8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
             ))}
           </div>
         ) : (
