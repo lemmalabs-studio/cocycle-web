@@ -9,11 +9,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Cocycle - Find people to ride with",
+  title: "Spin - Ride Together",
   description:
-    "Cocycle makes it effortless to discover, plan, and join cycling rides with others. Because cycling is better together.",
+    "Spin makes it effortless to discover, plan, and join cycling rides with others. Because cycling is better together.",
   openGraph: {
-    title: "Cocycle - Find people to ride with",
+    title: "Spin - Ride Together",
     description:
       "Discover, plan, and join cycling rides with others. Because cycling is better together.",
     type: "website",
