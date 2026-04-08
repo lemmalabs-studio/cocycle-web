@@ -112,7 +112,7 @@ export default function StepsScroll() {
       <div className="sticky top-0 h-screen bg-white overflow-hidden flex flex-col justify-center">
         <div className="max-w-6xl mx-auto w-full px-8 lg:px-16">
           <p
-            className="text-xs font-bold tracking-[0.2em] uppercase mb-8 italic text-[#6B7A90]"
+            className="text-xs font-bold tracking-[0.2em] uppercase mt-20 italic text-[#6B7A90]"
             style={{ fontFamily: SF }}
           >
             Steps to Spin

@@ -105,7 +105,7 @@ export default function Home() {
           alt="Cyclists riding together"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
-        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0" />
 
         <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
           <h1
