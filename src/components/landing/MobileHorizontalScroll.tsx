@@ -1,5 +1,5 @@
-import { useWaitlist } from "@/contexts/WaitlistContext";
 import { useEffect, useRef } from "react";
+import { useWaitlist } from "@/contexts/WaitlistContext";
 
 const SF =
   "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif";
@@ -28,10 +28,10 @@ const ITEMS: (
   { type: "image", src: "/p3.png", alt: "Group cycling on a sunny day" },
 ];
 
-export default function HorizontalScroll() {
-  const { openWaitlist } = useWaitlist();
+export default function MobileHorizontalScroll() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const { openWaitlist } = useWaitlist();
 
   useEffect(() => {
     const wrapper = wrapperRef.current;
@@ -54,21 +54,21 @@ export default function HorizontalScroll() {
 
   return (
     <section
-      id="features"
+      id="features-mobile"
       ref={wrapperRef}
-      style={{ height: `${ITEMS.length * 55}vh` }}
+      style={{ height: `${ITEMS.length * 80}vh` }}
       className="relative"
     >
       <div className="sticky top-0 h-screen overflow-hidden bg-white flex flex-col">
-        <div className="pt-16 pb-6 text-center px-6 flex-shrink-0">
+        <div className="pt-12 pb-4 text-center px-5 flex-shrink-0">
           <h2
-            className="text-3xl md:text-5xl font-bold text-[#1A2B4A] mb-2"
+            className="text-2xl font-bold text-[#1A2B4A] mb-1"
             style={{ fontFamily: SF }}
           >
             Cycling Made Social.
           </h2>
           <p
-            className="text-[#6B7A90] text-base md:text-lg"
+            className="text-[#6B7A90] text-sm"
             style={{ fontFamily: SF }}
           >
             Plan rides, find companions, and enjoy the journey together.
@@ -78,22 +78,27 @@ export default function HorizontalScroll() {
         <div className="flex-1 flex items-center overflow-hidden">
           <div
             ref={trackRef}
-            className="flex gap-5"
+            className="flex gap-3"
             style={{
               width: "max-content",
               willChange: "transform",
-              paddingLeft: "calc(30vw - 160px)", // centres the first card (half card width = ~160px)
+              paddingLeft: "20px",
+              paddingRight: "20px",
             }}
           >
             {ITEMS.map((item, i) =>
               item.type === "card" ? (
                 <div
                   key={i}
-                  className="flex-shrink-0 w-72 md:w-80 rounded-3xl p-8 flex flex-col justify-center gap-3"
-                  style={{ background: "#5B7FFF", height: "400px" }}
+                  className="flex-shrink-0 rounded-2xl p-6 flex flex-col justify-center gap-2"
+                  style={{
+                    background: "#5B7FFF",
+                    width: "260px",
+                    height: "340px",
+                  }}
                 >
                   <h3
-                    className="text-white text-3xl font-semibold mb-3 leading-snug"
+                    className="text-white text-2xl font-semibold mb-2 leading-snug"
                     style={{ fontFamily: SF }}
                   >
                     {item.title}
@@ -108,8 +113,8 @@ export default function HorizontalScroll() {
               ) : (
                 <div
                   key={i}
-                  className="flex-shrink-0 rounded-3xl overflow-hidden"
-                  style={{ width: "300px", height: "H" }}
+                  className="flex-shrink-0 rounded-2xl overflow-hidden"
+                  style={{ width: "240px", height: "340px" }}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -120,14 +125,14 @@ export default function HorizontalScroll() {
                 </div>
               ),
             )}
-            <div className="flex-shrink-0 w-16" />
+            <div className="flex-shrink-0 w-5" />
           </div>
         </div>
 
         <div className="flex justify-center pb-5 flex-shrink-0">
           <button
             onClick={openWaitlist}
-            className="bg-[#5B7FFF] text-white font-semibold px-10 py-3.5 rounded-full text-base shadow-lg cursor-pointer"
+            className="bg-[#5B7FFF] text-white font-semibold px-8 py-3 rounded-full text-sm cursor-pointer shadow-lg hover:bg-[#4A6EEE] transition-colors"
             style={{ fontFamily: SF }}
           >
             Join the waitlist

@@ -1,20 +1,51 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import FinalSection from "@/components/landing/FinalSection";
 import HorizontalScroll from "@/components/landing/HorizontalScroll";
 import StepsScroll from "@/components/landing/StepsScroll";
+import MobileHorizontalScroll from "@/components/landing/MobileHorizontalScroll";
+import MobileStepsScroll from "@/components/landing/MobileStepScroll";
+import MobileFinalSection from "@/components/landing/MobileFinalSection";
+import { WaitlistProvider, useWaitlist } from "@/contexts/WaitlistContext";
 
 const SF =
   "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif";
 
+const MOBILE_BREAKPOINT = 768;
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  return isMobile;
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function Home() {
+  const isMobile = useIsMobile();
+
+  return (
+    <WaitlistProvider isMobile={isMobile}>
+      <HomeContent isMobile={isMobile} />
+    </WaitlistProvider>
+  );
+}
+
+function HomeContent({ isMobile }: { isMobile: boolean | null }) {
+  const { openWaitlist } = useWaitlist();
   const headingRef = useRef<HTMLHeadingElement>(null);
   const heroRef = useRef<HTMLElement>(null);
   const navRef = useRef<HTMLElement>(null);
+  const mobile = isMobile === true;
 
   useEffect(() => {
     const el = headingRef.current;
@@ -81,16 +112,26 @@ export default function Home() {
           borderBottom: "1px solid rgba(0, 0, 0, 0.06)",
         }}
       >
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div
+          className={`mx-auto flex items-center justify-between ${
+            mobile ? "px-4 py-3" : "max-w-6xl px-6 py-4"
+          }`}
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/Logo-Clear.png" alt="Spin" className="h-9 w-auto" />
-          <a
-            href="#download"
-            className="bg-[#5B7FFF] text-white font-semibold px-5 py-2 rounded-full hover:bg-[#4A6EEE] transition-colors text-sm"
+          <img
+            src="/Logo-Clear.png"
+            alt="Spin"
+            className={mobile ? "h-7 w-auto" : "h-9 w-auto"}
+          />
+          <button
+            onClick={openWaitlist}
+            className={`bg-[#5B7FFF] text-white font-semibold rounded-full hover:bg-[#4A6EEE] transition-colors cursor-pointer ${
+              mobile ? "px-4 py-1.5 text-xs" : "px-5 py-2 text-sm"
+            }`}
             style={{ fontFamily: SF }}
           >
             Join the waitlist
-          </a>
+          </button>
         </div>
       </header>
 
@@ -101,29 +142,41 @@ export default function Home() {
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/heropic.png"
+          src="/heropic2.png"
           alt="Cyclists riding together"
           className="absolute inset-0 w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0" />
 
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-center px-6">
+        <div
+          className={`relative z-10 flex flex-col items-center justify-center h-full text-center ${
+            mobile ? "px-5" : "px-6"
+          }`}
+        >
           <h1
-            className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 leading-tight drop-shadow-md"
+            className={`font-bold text-white leading-tight drop-shadow-md ${
+              mobile
+                ? "text-3xl mb-3"
+                : "text-4xl md:text-6xl lg:text-7xl mb-4"
+            }`}
             style={{ fontFamily: SF }}
           >
             Riding is better together
           </h1>
           <p
-            className="text-lg md:text-xl text-white/90 mb-8 max-w-xl drop-shadow"
+            className={`text-white/90 drop-shadow max-w-xl ${
+              mobile ? "text-base mb-6" : "text-lg md:text-xl mb-8"
+            }`}
             style={{ fontFamily: SF }}
           >
             Spin makes it effortless to discover, plan, and join cycling rides
             with others.
           </p>
           <button
-            disabled
-            className="bg-[#5B7FFF] text-white font-semibold px-8 py-3.5 rounded-full text-base cursor-default opacity-90 shadow-lg"
+            onClick={openWaitlist}
+            className={`bg-[#5B7FFF] text-white font-semibold rounded-full shadow-lg hover:bg-[#4A6EEE] transition-colors cursor-pointer ${
+              mobile ? "px-6 py-3 text-sm" : "px-8 py-3.5 text-base"
+            }`}
             style={{ fontFamily: SF }}
           >
             Join the waitlist
@@ -132,10 +185,16 @@ export default function Home() {
       </section>
 
       {/* ── About Spin ── */}
-      <section className="bg-white py-20 lg:py-28 px-6 lg:px-16">
+      <section
+        className={`bg-white ${
+          mobile ? "py-14 px-5" : "py-20 lg:py-28 px-6 lg:px-16"
+        }`}
+      >
         <div className="max-w-6xl mx-auto">
           <p
-            className="text-xs font-bold tracking-[0.2em] text-[#1A2B4A] uppercase mb-6 italic"
+            className={`font-bold tracking-[0.2em] text-[#1A2B4A] uppercase italic ${
+              mobile ? "text-[10px] mb-4" : "text-xs mb-6"
+            }`}
             style={{ fontFamily: SF }}
           >
             About Spin
@@ -143,7 +202,11 @@ export default function Home() {
 
           <h2
             ref={headingRef}
-            className="text-3xl md:text-5xl lg:text-6xl font-black uppercase leading-tight tracking-tight text-[#1A2B4A] mb-16 max-w-5xl"
+            className={`font-black uppercase leading-tight tracking-tight text-[#1A2B4A] max-w-5xl ${
+              mobile
+                ? "text-2xl mb-10"
+                : "text-3xl md:text-5xl lg:text-6xl mb-16"
+            }`}
             style={{ fontFamily: SF }}
           >
             {[
@@ -172,48 +235,88 @@ export default function Home() {
             ))}
           </h2>
 
-          <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start">
-            <div className="w-full lg:w-1/2 flex-shrink-0">
+          <div
+            className={
+              mobile
+                ? "flex flex-col gap-6"
+                : "flex flex-col lg:flex-row gap-10 lg:gap-16 items-start"
+            }
+          >
+            <div
+              className={
+                mobile ? "w-full" : "w-full lg:w-1/2 flex-shrink-0"
+              }
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/p1.png"
                 alt="Two cyclists on a winding road"
-                className="w-full h-[380px] lg:h-[420px] object-cover rounded-sm"
+                className={`w-full object-cover rounded-sm ${
+                  mobile ? "h-[240px]" : "h-[380px] lg:h-[420px]"
+                }`}
               />
             </div>
-            <div className="w-full lg:w-1/2 flex items-end h-full lg:h-[420px]">
+            <div
+              className={
+                mobile
+                  ? "w-full"
+                  : "w-full lg:w-1/2 flex items-end h-full lg:h-[420px]"
+              }
+            >
               <p
-                className="text-[#4A5568] text-base lg:text-lg leading-relaxed text-justify"
+                className={`text-[#4A5568] leading-relaxed ${
+                  mobile
+                    ? "text-sm text-left"
+                    : "text-base lg:text-lg text-justify"
+                }`}
                 style={{ fontFamily: SF }}
               >
                 Group rides shouldn&apos;t be locked behind private chats or
                 intimidating club schedules. Spin is a dedicated platform built
-                for real lives and real schedules, prioritising ride discovery
-                as the primary experience. We encourage safer, more social
-                cycling by ensuring every rider knows exactly what to expect
-                before they ever clip in.
+                for real lives and real schedules, prioritising ride discovery as
+                the primary experience. We encourage safer, more social cycling
+                by ensuring every rider knows exactly what to expect before they
+                ever clip in.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Cycling Made Social — Horizontal Scroll ── */}
-      <HorizontalScroll />
+      {/* ── Cycling Made Social ── */}
+      {isMobile === null ? null : mobile ? <MobileHorizontalScroll /> : <HorizontalScroll />}
 
       {/* ── Steps to Spin ── */}
-      <StepsScroll />
+      {isMobile === null ? null : mobile ? <MobileStepsScroll /> : <StepsScroll />}
 
-      {/* ── Positioning ── */}
-      <FinalSection />
+      {/* ── Final Section ── */}
+      {isMobile === null ? null : mobile ? <MobileFinalSection /> : <FinalSection />}
 
       {/* ── Footer ── */}
-      <footer className="bg-[#7A9AFF] text-white py-12 px-6 mt-10">
+      <footer
+        className={`bg-[#7A9AFF] text-white mt-10 ${
+          mobile ? "py-8 px-5" : "py-12 px-6"
+        }`}
+      >
         <div className="max-w-4xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+          <div
+            className={`flex items-center gap-6 ${
+              mobile
+                ? "flex-col"
+                : "flex-col md:flex-row justify-between"
+            }`}
+          >
             <div className="flex items-center gap-2">
-              <img src="/Logo-Clear.png" alt="Spin" className="h-9 w-auto" />
-              <span className="text-xl font-bold" style={{ fontFamily: SF }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/Logo-Clear.png"
+                alt="Spin"
+                className={mobile ? "h-7 w-auto" : "h-9 w-auto"}
+              />
+              <span
+                className={`font-bold ${mobile ? "text-lg" : "text-xl"}`}
+                style={{ fontFamily: SF }}
+              >
                 Spin
               </span>
             </div>
@@ -224,15 +327,13 @@ export default function Home() {
               >
                 Instagram
               </Link>
-              {/* <Link href="#" className="hover:text-white transition-colors">
-                Terms
-              </Link>
-              <Link href="#" className="hover:text-white transition-colors">
-                Contact
-              </Link> */}
             </div>
           </div>
-          <div className="mt-8 pt-8 border-t border-white/10 text-center text-white/40 text-sm">
+          <div
+            className={`border-t border-white/10 text-center text-white/40 ${
+              mobile ? "mt-6 pt-6 text-xs" : "mt-8 pt-8 text-sm"
+            }`}
+          >
             © {new Date().getFullYear()} Spin. Made for cyclists who&apos;d
             rather not ride alone.
           </div>

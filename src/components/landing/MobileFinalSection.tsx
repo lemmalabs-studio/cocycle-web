@@ -4,10 +4,11 @@ import { useWaitlist } from "@/contexts/WaitlistContext";
 const SF =
   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif';
 
-// Split text into individually-addressable spans
 const LETTERS = "TIME TO SPIN".split("");
 
-export default function FinalSection() {
+
+
+export default function MobileFinalSection() {
   const { openWaitlist } = useWaitlist();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLDivElement>(null);
@@ -26,36 +27,29 @@ export default function FinalSection() {
     const scrolled = Math.max(0, -rect.top);
     const progress = Math.min(1, scrolled / totalScroll);
 
-    // Image grows from 25% → 100%
-    const scale = 0.25 + progress * 0.75;
+    // Image grows from 30% → 100% (start bigger on mobile)
+    const scale = 0.3 + progress * 0.7;
     imgDiv.style.width = `${scale * 100}%`;
     imgDiv.style.height = `${scale * 100}%`;
 
-    // Border radius 24px → 0px
-    const radius = Math.max(0, 24 - progress * 60);
+    const radius = Math.max(0, 20 - progress * 50);
     const imgEl = imgDiv.querySelector("img");
     if (imgEl) imgEl.style.borderRadius = `${radius}px`;
     overlay.style.borderRadius = `${radius}px`;
 
-    // Overlay sizing must match the image container
     overlay.style.width = `${scale * 100}%`;
     overlay.style.height = `${scale * 100}%`;
 
-    // Overlay opacity: 0 → 0.45 (lighter so image stays visible)
-    overlay.style.opacity = String(Math.min(0.45, progress * 0.1));
+    overlay.style.opacity = String(Math.min(0.45, progress * 0.8));
 
-    // --- Per-letter color logic ---
-    // Get image bounding rect
     const imgRect = imgDiv.getBoundingClientRect();
 
     letterRefs.current.forEach((span) => {
       if (!span) return;
       const letterRect = span.getBoundingClientRect();
 
-      // Use a tighter inset (30%) so the letter needs to be well inside
-      // the image before flipping — not just barely overlapping
-      const insetX = letterRect.width * 0.3;
-      const insetY = letterRect.height * 0.3;
+      const insetX = letterRect.width * 0.25;
+      const insetY = letterRect.height * 0.25;
 
       const overImage =
         letterRect.left + insetX >= imgRect.left &&
@@ -63,8 +57,6 @@ export default function FinalSection() {
         letterRect.top + insetY >= imgRect.top &&
         letterRect.bottom - insetY <= imgRect.bottom;
 
-      // If the letter overlaps the image (which has the dark overlay),
-      // make it white. Otherwise keep it black (on white bg).
       span.style.color = overImage ? "#ffffff" : "#000000";
     });
   }, []);
@@ -76,9 +68,8 @@ export default function FinalSection() {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    // Also listen for resize since layout changes affect rects
     window.addEventListener("resize", handleScroll, { passive: true });
-    onScroll(); // initial call
+    onScroll();
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -88,7 +79,7 @@ export default function FinalSection() {
   }, [onScroll]);
 
   return (
-    <section ref={wrapperRef} style={{ height: "300vh" }} className="relative">
+    <section ref={wrapperRef} style={{ height: "250vh" }} className="relative">
       <div
         className="sticky top-0 h-screen overflow-hidden"
         style={{
@@ -98,13 +89,13 @@ export default function FinalSection() {
           backgroundColor: "#ffffff",
         }}
       >
-        {/* Expanding image container */}
+        {/* Expanding image */}
         <div
           ref={imgRef}
           style={{
             position: "absolute",
-            width: "25%",
-            height: "25%",
+            width: "30%",
+            height: "30%",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
@@ -119,44 +110,45 @@ export default function FinalSection() {
               width: "100%",
               height: "100%",
               objectFit: "cover",
-              borderRadius: "24px",
+              borderRadius: "20px",
               display: "block",
             }}
           />
         </div>
 
-        {/* Dark overlay — matches image size exactly */}
+        {/* Dark overlay */}
         <div
           ref={overlayRef}
           style={{
             position: "absolute",
-            width: "25%",
-            height: "25%",
+            width: "30%",
+            height: "30%",
             top: "50%",
             left: "50%",
             transform: "translate(-50%, -50%)",
             background: "rgba(0,0,0,0.85)",
-            borderRadius: "24px",
+            borderRadius: "20px",
             opacity: 0,
             pointerEvents: "none",
             zIndex: 5,
           }}
         />
 
-        {/* Text layer — per-letter spans */}
+        {/* Text */}
         <div
           style={{
             position: "relative",
             zIndex: 10,
             textAlign: "center",
             pointerEvents: "none",
+            padding: "0 12px",
           }}
         >
           <h2
             className="font-black uppercase leading-none select-none"
             style={{
               fontFamily: SF,
-              fontSize: "clamp(5rem, 14vw, 13rem)",
+              fontSize: "clamp(2.8rem, 13vw, 5rem)",
               letterSpacing: "-0.03em",
               whiteSpace: "nowrap",
             }}
@@ -164,25 +156,22 @@ export default function FinalSection() {
             {LETTERS.map((char, i) => (
               <span
                 key={i}
-                ref={(el) => {
-                  letterRefs.current[i] = el;
-                }}
+                ref={(el) => { letterRefs.current[i] = el; }}
                 style={{
                   color: "#000000",
                   transition: "color 0.15s ease",
                   display: "inline-block",
-                  // Preserve space characters
-                  ...(char === " " ? { width: "0.3em" } : {}),
+                  ...(char === " " ? { width: "0.25em" } : {}),
                 }}
               >
                 {char === " " ? "\u00A0" : char}
               </span>
             ))}
           </h2>
-          <div style={{ marginTop: "2rem", pointerEvents: "auto" }}>
+          <div style={{ marginTop: "1.5rem", pointerEvents: "auto" }}>
             <button
               onClick={openWaitlist}
-              className="bg-[#5B7FFF] text-white font-semibold px-8 py-3.5 rounded-full text-base cursor-default shadow-lg cursor-pointer"
+              className="bg-[#5B7FFF] text-white font-semibold px-6 py-3 rounded-full text-sm cursor-pointer shadow-lg hover:bg-[#4A6EEE] transition-colors"
               style={{ fontFamily: SF }}
             >
               Join the waitlist
