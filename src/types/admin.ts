@@ -65,3 +65,10 @@ export interface BanUserRequest {
   userId: string;
   reason: string;
 }
+
+export interface WaitlistEntry {
+  id: string;
+  email: string;
+  name: string | null;
+  createdAt: string;
+}

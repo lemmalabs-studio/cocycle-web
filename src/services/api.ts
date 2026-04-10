@@ -97,3 +97,11 @@ export const userProfileApi = {
     }
   },
 };
+
+export const waitlistApi = {
+  join: (email: string, name?: string): Promise<{ message: string }> =>
+    fetchApi("/api/waitlist", {
+      method: "POST",
+      body: JSON.stringify({ email, name }),
+    }),
+};

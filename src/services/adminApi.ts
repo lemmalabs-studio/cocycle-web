@@ -5,10 +5,14 @@ import {
   AdminUser,
   AdminStats,
   ReviewReportRequest,
+  WaitlistEntry,
 } from "@/types/admin";
 
 class ApiError extends Error {
-  constructor(public status: number, message: string) {
+  constructor(
+    public status: number,
+    message: string,
+  ) {
     super(message);
     this.name = "ApiError";
   }
@@ -17,7 +21,7 @@ class ApiError extends Error {
 async function fetchAdmin<T>(
   endpoint: string,
   token: string,
-  options?: RequestInit
+  options?: RequestInit,
 ): Promise<T> {
   const res = await fetch(`${API_URL}${endpoint}`, {
     ...options,
@@ -44,7 +48,12 @@ export const adminApi = {
   // ── Reports ────────────────────────────────────────────────────────────────
   getReports: (
     token: string,
-    params?: { status?: string; entityType?: string; limit?: number; offset?: number }
+    params?: {
+      status?: string;
+      entityType?: string;
+      limit?: number;
+      offset?: number;
+    },
   ): Promise<Report[]> => {
     const q = new URLSearchParams();
     if (params?.status) q.set("status", params.status);
@@ -61,7 +70,7 @@ export const adminApi = {
   reviewReport: (
     token: string,
     id: string,
-    body: ReviewReportRequest
+    body: ReviewReportRequest,
   ): Promise<void> =>
     fetchAdmin(`/api/admin/reports/${id}/review`, token, {
       method: "PUT",
@@ -71,10 +80,16 @@ export const adminApi = {
   // ── Users ──────────────────────────────────────────────────────────────────
   getUsers: (
     token: string,
-    params?: { isBanned?: boolean; search?: string; limit?: number; offset?: number }
+    params?: {
+      isBanned?: boolean;
+      search?: string;
+      limit?: number;
+      offset?: number;
+    },
   ): Promise<AdminUser[]> => {
     const q = new URLSearchParams();
-    if (params?.isBanned !== undefined) q.set("isBanned", String(params.isBanned));
+    if (params?.isBanned !== undefined)
+      q.set("isBanned", String(params.isBanned));
     if (params?.search) q.set("search", params.search);
     if (params?.limit) q.set("limit", String(params.limit));
     if (params?.offset) q.set("offset", String(params.offset));
@@ -93,29 +108,53 @@ export const adminApi = {
 
   // ── Content removal ────────────────────────────────────────────────────────
   removeRide: (token: string, id: string, note?: string): Promise<void> =>
-    fetchAdmin(`/api/admin/rides/${id}${note ? `?note=${encodeURIComponent(note)}` : ""}`, token, {
-      method: "DELETE",
-    }),
+    fetchAdmin(
+      `/api/admin/rides/${id}${note ? `?note=${encodeURIComponent(note)}` : ""}`,
+      token,
+      {
+        method: "DELETE",
+      },
+    ),
 
   removeCommunity: (token: string, id: string, note?: string): Promise<void> =>
-    fetchAdmin(`/api/admin/communities/${id}${note ? `?note=${encodeURIComponent(note)}` : ""}`, token, {
-      method: "DELETE",
-    }),
+    fetchAdmin(
+      `/api/admin/communities/${id}${note ? `?note=${encodeURIComponent(note)}` : ""}`,
+      token,
+      {
+        method: "DELETE",
+      },
+    ),
 
   removeMessage: (token: string, id: string, note?: string): Promise<void> =>
-    fetchAdmin(`/api/admin/messages/${id}${note ? `?note=${encodeURIComponent(note)}` : ""}`, token, {
-      method: "DELETE",
-    }),
+    fetchAdmin(
+      `/api/admin/messages/${id}${note ? `?note=${encodeURIComponent(note)}` : ""}`,
+      token,
+      {
+        method: "DELETE",
+      },
+    ),
 
   // ── Audit log ──────────────────────────────────────────────────────────────
   getActions: (
     token: string,
-    params?: { limit?: number; offset?: number }
+    params?: { limit?: number; offset?: number },
   ): Promise<AdminAction[]> => {
     const q = new URLSearchParams();
     if (params?.limit) q.set("limit", String(params.limit));
     if (params?.offset) q.set("offset", String(params.offset));
     const qs = q.toString();
     return fetchAdmin(`/api/admin/actions${qs ? `?${qs}` : ""}`, token);
+  },
+
+  // inside the adminApi object, after getActions:
+  getWaitlist: (
+    token: string,
+    params?: { limit?: number; offset?: number },
+  ): Promise<WaitlistEntry[]> => {
+    const q = new URLSearchParams();
+    if (params?.limit) q.set("limit", String(params.limit));
+    if (params?.offset) q.set("offset", String(params.offset));
+    const qs = q.toString();
+    return fetchAdmin(`/api/admin/waitlist${qs ? `?${qs}` : ""}`, token);
   },
 };

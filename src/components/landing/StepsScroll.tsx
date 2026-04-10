@@ -96,9 +96,12 @@ export default function StepsScroll() {
       const step = STEPS[0];
 
       // Set initial text
-      const numCurrent = numRef.current?.querySelector<HTMLSpanElement>(".wheel-current");
-      const titleCurrent = titleRef.current?.querySelector<HTMLSpanElement>(".wheel-current");
-      const bodyCurrent = bodyRef.current?.querySelector<HTMLSpanElement>(".wheel-current");
+      const numCurrent =
+        numRef.current?.querySelector<HTMLSpanElement>(".wheel-current");
+      const titleCurrent =
+        titleRef.current?.querySelector<HTMLSpanElement>(".wheel-current");
+      const bodyCurrent =
+        bodyRef.current?.querySelector<HTMLSpanElement>(".wheel-current");
       if (numCurrent) numCurrent.textContent = step.num;
       if (titleCurrent) titleCurrent.textContent = step.title;
       if (bodyCurrent) bodyCurrent.textContent = step.body;
@@ -303,20 +306,144 @@ export default function StepsScroll() {
             <div className="flex-shrink-0 flex items-center justify-center overflow-hidden">
               <div ref={cardRef} style={{ opacity: 0 }}>
                 <div
-                  className="relative overflow-hidden rounded-[2.5rem] shadow-2xl"
+                  className="relative"
                   style={{
                     width: "280px",
-                    height: "560px",
-                    background: "#5B7FFF",
-                    padding: "12px",
+                    height: "570px",
                   }}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    ref={imgElRef}
-                    src="/proto-1.png"
-                    alt="App screen"
-                    className="w-full h-full object-cover rounded-[2rem]"
+                  {/* Outer shell — titanium-style frame */}
+                  <div
+                    className="absolute inset-0 rounded-[3rem]"
+                    style={{
+                      background:
+                        "linear-gradient(145deg, #2A2A2E 0%, #1C1C1E 50%, #2A2A2E 100%)",
+                        
+                    }}
+                  />
+
+                  {/* Side buttons — left */}
+                  {/* Silent toggle */}
+                  <div
+                    className="absolute"
+                    style={{
+                      left: "-2px",
+                      top: "100px",
+                      width: "3px",
+                      height: "18px",
+                      background: "linear-gradient(180deg, #3A3A3C, #2C2C2E)",
+                      borderRadius: "2px 0 0 2px",
+                      boxShadow: "-1px 0 2px rgba(0,0,0,0.3)",
+                    }}
+                  />
+                  {/* Volume up */}
+                  <div
+                    className="absolute"
+                    style={{
+                      left: "-2px",
+                      top: "140px",
+                      width: "3px",
+                      height: "32px",
+                      background: "linear-gradient(180deg, #3A3A3C, #2C2C2E)",
+                      borderRadius: "2px 0 0 2px",
+                      boxShadow: "-1px 0 2px rgba(0,0,0,0.3)",
+                    }}
+                  />
+                  {/* Volume down */}
+                  <div
+                    className="absolute"
+                    style={{
+                      left: "-2px",
+                      top: "180px",
+                      width: "3px",
+                      height: "32px",
+                      background: "linear-gradient(180deg, #3A3A3C, #2C2C2E)",
+                      borderRadius: "2px 0 0 2px",
+                      boxShadow: "-1px 0 2px rgba(0,0,0,0.3)",
+                    }}
+                  />
+
+                  {/* Side button — right (power) */}
+                  <div
+                    className="absolute"
+                    style={{
+                      right: "-2px",
+                      top: "155px",
+                      width: "3px",
+                      height: "40px",
+                      background: "linear-gradient(180deg, #3A3A3C, #2C2C2E)",
+                      borderRadius: "0 2px 2px 0",
+                      boxShadow: "1px 0 2px rgba(0,0,0,0.3)",
+                    }}
+                  />
+
+                  {/* Inner bezel */}
+                  <div
+                    className="absolute rounded-[2.6rem] overflow-hidden"
+                    style={{
+                      top: "8px",
+                      left: "8px",
+                      right: "8px",
+                      bottom: "8px",
+                      background: "#000",
+                    }}
+                  >
+                    {/* Screen */}
+                    <div className="relative w-full h-full overflow-hidden rounded-[2.2rem]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        ref={imgElRef}
+                        src="/proto-1.png"
+                        alt="App screen"
+                        className="w-full h-full object-cover"
+                      />
+
+                      {/* Dynamic Island */}
+                      <div
+                        className="absolute left-1/2 -translate-x-1/2"
+                        style={{
+                          top: "10px",
+                          width: "90px",
+                          height: "25px",
+                          background: "#000",
+                          borderRadius: "20px",
+                        }}
+                      />
+
+                      {/* Status bar glass effect */}
+                      <div
+                        className="absolute top-0 left-0 right-0"
+                        style={{
+                          height: "44px",
+                          background:
+                            "linear-gradient(180deg, rgba(0,0,0,0.15) 0%, transparent 100%)",
+                          pointerEvents: "none",
+                        }}
+                      />
+
+                      {/* Home indicator */}
+                      <div
+                        className="absolute bottom-2 left-1/2 -translate-x-1/2"
+                        style={{
+                          width: "100px",
+                          height: "4px",
+                          background: "rgba(255,255,255,0.25)",
+                          borderRadius: "2px",
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Screen edge highlight */}
+                  <div
+                    className="absolute rounded-[2.6rem] pointer-events-none"
+                    style={{
+                      top: "8px",
+                      left: "8px",
+                      right: "8px",
+                      bottom: "8px",
+                      boxShadow: "0 0 0 0.5px rgba(255,255,255,0.1) inset",
+                    }}
                   />
                 </div>
               </div>

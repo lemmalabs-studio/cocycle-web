@@ -9,6 +9,7 @@ export const adminKeys = {
   report: (id: string) => [...adminKeys.all, "reports", id] as const,
   users: (filters?: object) => [...adminKeys.all, "users", filters] as const,
   actions: (filters?: object) => [...adminKeys.all, "actions", filters] as const,
+  waitlist: (filters?: object) => [...adminKeys.all, "waitlist", filters] as const,
 };
 
 // ── Stats ────────────────────────────────────────────────────────────────────
@@ -133,6 +134,18 @@ export function useAdminActions(token: string | null) {
   return useQuery({
     queryKey: adminKeys.actions(),
     queryFn: () => adminApi.getActions(token!),
+    enabled: !!token,
+    staleTime: 1000 * 60,
+  });
+}
+
+export function useAdminWaitlist(
+  token: string | null,
+  params?: { limit?: number; offset?: number }
+) {
+  return useQuery({
+    queryKey: adminKeys.waitlist(params),
+    queryFn: () => adminApi.getWaitlist(token!, params),
     enabled: !!token,
     staleTime: 1000 * 60,
   });
