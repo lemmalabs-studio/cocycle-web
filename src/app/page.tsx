@@ -155,9 +155,7 @@ function HomeContent({ isMobile }: { isMobile: boolean | null }) {
         >
           <h1
             className={`font-bold text-white leading-tight drop-shadow-md ${
-              mobile
-                ? "text-3xl mb-3"
-                : "text-4xl md:text-6xl lg:text-7xl mb-4"
+              mobile ? "text-3xl mb-3" : "text-4xl md:text-6xl lg:text-7xl mb-4"
             }`}
             style={{ fontFamily: SF }}
           >
@@ -243,9 +241,7 @@ function HomeContent({ isMobile }: { isMobile: boolean | null }) {
             }
           >
             <div
-              className={
-                mobile ? "w-full" : "w-full lg:w-1/2 flex-shrink-0"
-              }
+              className={mobile ? "w-full" : "w-full lg:w-1/2 flex-shrink-0"}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -273,10 +269,10 @@ function HomeContent({ isMobile }: { isMobile: boolean | null }) {
               >
                 Group rides shouldn&apos;t be locked behind private chats or
                 intimidating club schedules. Spin is a dedicated platform built
-                for real lives and real schedules, prioritising ride discovery as
-                the primary experience. We encourage safer, more social cycling
-                by ensuring every rider knows exactly what to expect before they
-                ever clip in.
+                for real lives and real schedules, prioritising ride discovery
+                as the primary experience. We encourage safer, more social
+                cycling by ensuring every rider knows exactly what to expect
+                before they ever clip in.
               </p>
             </div>
           </div>
@@ -284,13 +280,25 @@ function HomeContent({ isMobile }: { isMobile: boolean | null }) {
       </section>
 
       {/* ── Cycling Made Social ── */}
-      {isMobile === null ? null : mobile ? <MobileHorizontalScroll /> : <HorizontalScroll />}
+      {isMobile === null ? null : mobile ? (
+        <MobileHorizontalScroll />
+      ) : (
+        <HorizontalScroll />
+      )}
 
       {/* ── Steps to Spin ── */}
-      {isMobile === null ? null : mobile ? <MobileStepsScroll /> : <StepsScroll />}
+      {isMobile === null ? null : mobile ? (
+        <MobileStepsScroll />
+      ) : (
+        <StepsScroll />
+      )}
 
       {/* ── Final Section ── */}
-      {isMobile === null ? null : mobile ? <MobileFinalSection /> : <FinalSection />}
+      {isMobile === null ? null : mobile ? (
+        <MobileFinalSection />
+      ) : (
+        <FinalSection />
+      )}
 
       {/* ── Footer ── */}
       <footer
@@ -301,9 +309,7 @@ function HomeContent({ isMobile }: { isMobile: boolean | null }) {
         <div className="max-w-4xl mx-auto">
           <div
             className={`flex items-center gap-6 ${
-              mobile
-                ? "flex-col"
-                : "flex-col md:flex-row justify-between"
+              mobile ? "flex-col" : "flex-col md:flex-row justify-between"
             }`}
           >
             <div className="flex items-center gap-2">
@@ -320,13 +326,36 @@ function HomeContent({ isMobile }: { isMobile: boolean | null }) {
                 Spin
               </span>
             </div>
-            <div className="flex gap-6 text-white/60 text-sm">
-              <Link
-                href="https://www.instagram.com/hey.spin/"
-                className="hover:text-white transition-colors"
-              >
-                Instagram
-              </Link>
+
+            <div className="flex-col gap-6">
+              <div className="flex gap-6 text-white/60 text-sm">
+                <Link
+                  href="https://www.instagram.com/hey.spin/"
+                  className="hover:text-white transition-colors"
+                >
+                  Instagram
+                </Link>
+              </div>
+              <div className="flex gap-6 text-white/60 text-sm">
+                <Link
+                  href="/spin_privacy_policy.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  Privacy and Policy
+                </Link>
+              </div>
+              <div className="flex gap-6 text-white/60 text-sm">
+                <Link
+                  href="/spin_terms_and_conditions.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  Terms and Conditions
+                </Link>
+              </div>
             </div>
           </div>
           <div
