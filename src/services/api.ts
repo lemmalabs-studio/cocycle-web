@@ -1,5 +1,7 @@
 import { API_URL } from "@/lib/constants";
+import { CommunityMemberResponse, CommunityResponse } from "@/types/community";
 import { RideResponse, ParticipantResponse } from "@/types/ride";
+import { UserProfile } from "@/types/user";
 
 class ApiError extends Error {
   constructor(
@@ -54,4 +56,52 @@ export const rideApi = {
     const query = searchParams.toString();
     return fetchApi<RideResponse[]>(`/api/rides/upcoming${query ? `?${query}` : ""}`);
   },
+
+  getUserJoined: (userId: string): Promise<RideResponse[]> => {
+    return fetchApi<RideResponse[]>(`/api/users/${userId}/rides/joined`);
+  },
+ 
+  getUserHosted: (userId: string): Promise<RideResponse[]> => {
+    return fetchApi<RideResponse[]>(`/api/users/${userId}/rides/hosted`);
+  },
+};
+
+export const communityApi = {
+  getById: (id: string): Promise<CommunityResponse> => {
+    return fetchApi<CommunityResponse>(`/api/communities/${id}`);
+  },
+
+  getMembers: (id: string): Promise<CommunityMemberResponse[]> => {
+    return fetchApi<CommunityMemberResponse[]>(`/api/communities/${id}/members`);
+  },
+
+  getAll: (): Promise<CommunityResponse[]> => {
+    return fetchApi<CommunityResponse[]>(`/api/communities`);
+  },
+
+  getFeatured: (): Promise<CommunityResponse[]> => {
+    return fetchApi<CommunityResponse[]>(`/api/communities/featured`);
+  },
+};
+
+ 
+export const userProfileApi = {
+  getById: async (userId: string): Promise<UserProfile | null> => {
+    try {
+      return await fetchApi<UserProfile>(`/api/users/${userId}`);
+    } catch (error) {
+      if (error instanceof ApiError && error.status === 404) {
+        return null;
+      }
+      throw error;
+    }
+  },
+};
+
+export const waitlistApi = {
+  join: (email: string, name?: string): Promise<{ message: string }> =>
+    fetchApi("/api/waitlist", {
+      method: "POST",
+      body: JSON.stringify({ email, name }),
+    }),
 };
